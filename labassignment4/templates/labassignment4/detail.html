@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Online Store APP</title>
-</head>
-<body>
+{% extends 'labassignment4/base.html' %}
+{% block body_block %}
     {% if cat_name %}
         
         <h3>Category:  {{ cat_name.name }}</h3>
@@ -18,5 +13,4 @@
         {% endif %}
     {% endif %}
     <p><a href={% url 'labassignment4:index' %}>Main page (namespaced URL)</a></p>
-</body>
-</html>
+{% endblock %}

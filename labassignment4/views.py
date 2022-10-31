@@ -7,7 +7,7 @@ from .models import Category, Product, Client, Order
 
 def index(request):
     cat_list = Category.objects.all().order_by('id')[:10]
-    return render(request, 'labassignment4/index0.html', {'cat_list': cat_list})
+    return render(request, 'labassignment4/index.html', {'cat_list': cat_list})
     
 def about(request):
     return render(request, 'labassignment4/about.html')

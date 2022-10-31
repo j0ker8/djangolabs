@@ -1,0 +1,16 @@
+
+h1 {
+    font-size: 24;
+    color: black;
+    font-style: italic;
+    position: static
+}
+
+.hbar1 {
+    display: inline;
+    margin: 15px;
+}
+
+body {
+    background-color: gray
+}

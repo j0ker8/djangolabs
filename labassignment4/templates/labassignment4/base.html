@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="{% static 'myapp/style.css' %}"/>
+        <title>Online Store APP - {% block title %}Welcome!{% endblock %}</title>
+    </head>
+<body>
+    <div>
+        <h1>{% block myhdg %}Hello Shardul {% endblock %}</h1>
+        {% block body_block %}*** {% endblock %}
+        </div>
+        <hr/>
+        <div>
+            <ul>
+                <li class="hbar1"><a href="/labassignment4/about/">Find out about this site</a></li>
+                <li class="hbar1"><a href = "{% url 'labassignment4:index' %}">Click here to return to main page</a><br/></li>
+            </ul>
+        </div>
+</body>
+</html>
