@@ -9,7 +9,7 @@
     <h2>List of Categories</h2>
     <ol>
         {% for cat in cat_list %}
-            <li> {{ cat.name}} </li>
+            <li><a href={% url 'labassignment4:detail' cat_no=cat.id %}> {{ cat.name}} </li>
         {% endfor %}
     </ol>
     {% else %}
