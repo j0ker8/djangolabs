@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Online Store APP</title>
+</head>
+<body>
+    {% if cat_list %}
+    <h2>List of Categories</h2>
+    <ol>
+        {% for cat in cat_list %}
+            <li> {{ cat.name}} </li>
+        {% endfor %}
+    </ol>
+    {% else %}
+        <strong>There are no available categories!</strong>
+    {% endif %}
+    <p><a href={% url 'labassignment4:about' %}>About page</p>
+</body>
+</html>
