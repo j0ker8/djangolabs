@@ -1,0 +1,16 @@
+{% extends 'labassignment4/base.html' %}
+{% block body_block %}
+    {% if cat_name %}
+        
+        <h3>Category:  {{ cat_name.name }}</h3>
+        <p>Warehouse location : {{ cat_name.warehouse }}</p
+        {% if prod_list %}
+        <ul>
+            {% for prods in prod_list %}
+            <li>{{ prods.name }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endif %}
+    <p><a href={% url 'labassignment4:index' %}>Main page (namespaced URL)</a></p>
+{% endblock %}
