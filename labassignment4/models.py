@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
 
 # Create your models here.
 
@@ -18,9 +19,14 @@ class Product(models.Model):
     stock = models.PositiveIntegerField(default=100)
     available = models.BooleanField(default=True)
     description = models.TextField(blank=True,default='')
+    interested = models.PositiveIntegerField(default=0)
     
     def __str__(self):
         return self.name
+        
+    def refill(self):
+        self.stock = self.stock+100
+        return self.stock
     
 class Client(User): 
     PROVINCE_CHOICES = [('AB', 'Alberta'), ('MB', 'Manitoba'), ('ON', 'Ontario'), ('QC', 'Quebec')]
@@ -39,7 +45,7 @@ class Order(models.Model):
     num_units = models.PositiveIntegerField()
     ORDER_CHOICES = [(0,'Order Cancelled'),(1,'Order Placed'),(2,'Order Shipped'),(3,'Order Delivered')]
     order_status = models.IntegerField(choices=ORDER_CHOICES, default=1)
-    status_date = models.DateField()
+    status_date = models.DateField(default=date.today)
     
     def __str__(self):
         return "For "+str(self.num_units)+" "+str(self.product)+"(s) by "+str(self.client)
