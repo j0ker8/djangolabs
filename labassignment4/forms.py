@@ -13,7 +13,7 @@ class OrderForm(forms.ModelForm):
     #num_units = forms.IntegerField(label='Quantity')
     
 class InterestForm(forms.Form):
-    INT_CHOICES = [('1','Yes'),('0','No')]
+    INT_CHOICES = [('Yes','Yes'),('No','No')]
     interested = forms.ChoiceField(widget=forms.RadioSelect,choices=INT_CHOICES)
     quantity = forms.IntegerField(initial=1,min_value=0)
     comments = forms.CharField(widget=forms.Textarea,label='Additional Comments',required=False)
