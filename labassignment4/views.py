@@ -1,11 +1,15 @@
-from django.shortcuts import render, redirect
 from datetime import date
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
-from django.http import Http404
-from .models import Category, Product, Client, Order
-from .forms import OrderForm, InterestForm
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import F
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+
+from .forms import InterestForm, OrderForm
+from .models import Category, Client, Order, Product
+
 # Create your views here.
 
 def index(request):
@@ -58,3 +62,24 @@ def productdetail(request, prod_id):
     else :
         form = InterestForm()
         return render(request, 'labassignment4/productdetail.html',{'form':form,'prod':prod})
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username,password=password)
+        if user :
+            if user.is_active:
+                login(request,user)
+                return HttpResponseRedirect(reverse('labassignment4:index'))
+            else:
+                return HttpResponse('Your account is disabled')
+        else :
+            return HttpResponse('Invalid Login details')
+    else :
+        return render(request, 'labassignment4/login.html')
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('labassignement4:index'))
