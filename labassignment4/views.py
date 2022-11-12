@@ -82,4 +82,17 @@ def user_login(request):
 @login_required
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect(reverse('labassignement4:index'))
+    return HttpResponseRedirect(reverse('labassignment4:index'))
+
+def myorders(request):
+    if request.user.is_authenticated :
+        try :
+            usobjid = Client.objects.get(pk=request.user.id)
+            orderset = usobjid.order_set.all()
+            #return HttpResponse(orderset)
+        except: 
+            return HttpResponse("This user name is not registered")
+        
+        return render(request, 'labassignment4/myorders.html',{'orderset':orderset})
+    else :
+        return HttpResponse("User not authenticated")
