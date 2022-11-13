@@ -5,11 +5,17 @@
     <h2>List of Categories</h2>
     <ol>
         {% for cat in cat_list %}
-            <li><a href={% url 'labassignment4:detail' cat_no=cat.id %}> {{ cat.name}} </li>
+            <li><a href="{% url 'labassignment4:detail' cat_no=cat.id %}"> {{ cat.name }} </a></li>
         {% endfor %}
     </ol>
     {% else %}
         <strong>There are no available categories!</strong>
     {% endif %}
-    
+    </div>
+    <div>
+        {% if logininfo %}
+            <p>Last login : {{logininfo}}</p>
+        {% endif %}</div>
+        
+        <div>    
 {% endblock %}
