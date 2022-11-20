@@ -7,8 +7,14 @@
     </head>
 <body>
     <div>
-        <h1>{% block myhdg %}Hello Shardul {% endblock %}</h1>
-        {% block body_block %}*** {% endblock %}
+        <h1>{% block myhdg %}
+            {% if user.is_authenticated %}
+            <p>Hi, {{ user.get_username }}</p>
+            {% else %}
+            <p>Hi User</p>
+            {% endif %}
+            {% endblock %}</h1>
+            {% block body_block %}*** {% endblock %}
         </div>
         <hr/>
         <div>
