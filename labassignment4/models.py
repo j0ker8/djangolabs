@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import date
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
 
@@ -16,7 +17,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products',on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    stock = models.PositiveIntegerField(default=100)
+    stock = models.PositiveIntegerField(default=100, validators=[MinValueValidator(0),MaxValueValidator(1000)])
     available = models.BooleanField(default=True)
     description = models.TextField(blank=True,default='')
     interested = models.PositiveIntegerField(default=0)
