@@ -1,19 +1,36 @@
-from django.shortcuts import render, redirect
-from datetime import date
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
-from django.http import Http404
-from .models import Category, Product, Client, Order
-from .forms import OrderForm, InterestForm
+from datetime import date, datetime
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import F
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+
+from .forms import InterestForm, OrderForm
+from .models import Category, Client, Order, Product
+
 # Create your views here.
 
 def index(request):
     cat_list = Category.objects.all().order_by('id')[:10]
-    return render(request, 'labassignment4/index.html', {'cat_list': cat_list})
+
+    if 'last_login' in request.session :
+        logininfo = request.session['last_login']
+    else :
+        logininfo = 'Your last login was more than an hour ago'
+    return render(request, 'labassignment4/index.html', {'cat_list': cat_list,'logininfo':logininfo})
     
 def about(request):
-    return render(request, 'labassignment4/about.html')
+    if 'about_visits' in request.session:
+        last_visit = request.session['about_visits']
+        request.session['about_visits']=last_visit+1
+        request.session.set_expiry(10)        
+    else :
+        request.session['about_visits']=1
+        last_visit=0
+        request.session.set_expiry(300)
+    return render(request, 'labassignment4/about.html',{'last_visit':last_visit})
     
 def detail(request,cat_no):
     #response = HttpResponse()
@@ -58,3 +75,40 @@ def productdetail(request, prod_id):
     else :
         form = InterestForm()
         return render(request, 'labassignment4/productdetail.html',{'form':form,'prod':prod})
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username,password=password)
+        if user :
+            if user.is_active:
+                if 'last_login' not in request.session :
+                    request.session['last_login'] = str(datetime.now())
+                    request.session.set_expiry(3600)
+                login(request,user)
+                return HttpResponseRedirect(reverse('labassignment4:index'))
+            else:
+                return HttpResponse('Your account is disabled')
+        else :
+            return HttpResponse('Invalid Login details')
+    else :
+        return render(request, 'labassignment4/login.html')
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('labassignment4:index'))
+
+def myorders(request):
+    if request.user.is_authenticated :
+        try :
+            usobjid = Client.objects.get(pk=request.user.id)
+            orderset = usobjid.order_set.all()
+            #return HttpResponse(orderset)
+        except: 
+            return HttpResponse("This user name is not registered")
+        
+        return render(request, 'labassignment4/myorders.html',{'orderset':orderset})
+    else :
+        return HttpResponse("User not authenticated")
